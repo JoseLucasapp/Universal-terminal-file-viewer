@@ -4,6 +4,7 @@ use crossterm::style::{Stylize, PrintStyledContent};
 use std::io::{stdout};
 use crossterm::{execute, terminal, cursor};
 use pdf_extract;
+use std::fs;
 
 fn main() {
     let matches = Command::new("see_file")
@@ -119,6 +120,18 @@ fn show_pdf(path: &str){
         }
         Err(e)=>{
             eprintln!("Failed to open pdf: {}", e);
+        }
+    }
+}
+
+fn show_text_file(path: &str){
+    match fs::read_to_string(path){
+        Ok(content) =>{
+            println!("--- File content ---\n");
+            println!("{}", content);
+        }
+        Err(e)=>{
+            eprintln!("Failed to open file: '{}' : {}",path, e);
         }
     }
 }
