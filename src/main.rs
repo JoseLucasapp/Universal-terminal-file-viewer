@@ -85,7 +85,7 @@ fn show_image(path: &str, width_scale: u32, height_scale: u32){
             std::process::exit(1);
         }
     };
-    let (w, h) = img.dimensions();
+    let (_w, h) = img.dimensions();
     let new_height = ((h as f32 * 0.5) / (10.0 / height_scale.max(1) as f32)) as u32;
     let resized = img.resize(80, new_height, image::imageops::FilterType::Nearest);
 

@@ -1,10 +1,10 @@
-# see\_file 🧾
+# Universal terminal file viewer 🧾
 
 [![Rust](https://img.shields.io/badge/Rust-Stable-informational)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
-***see\_file*** is a lightweight CLI tool written in Rust to display **images, PDFs, and plain text files directly in your terminal**, without needing any GUI tools. It supports colorful image rendering with ASCII blocks, PDF viewing (as text or visual), and structured terminal output.
+***Universal terminal file viewer*** is a lightweight CLI tool written in Rust to display **images, PDFs, and plain text files directly in your terminal**, without needing any GUI tools. It supports colorful image rendering with ASCII blocks, PDF viewing, and structured terminal output.
 
 ---
 
@@ -21,19 +21,43 @@
 
 ## 📦 Installation
 
-Clone and build with Cargo:
+Download the latest installer from the [Releases page](https://github.com/JoseLucasapp/Universal-terminal-file-viewer/releases) and run the `.exe` file:
 
 ```bash
-git clone https://github.com/your-username/see_file
-cd see_file
+see_file_installer.exe
+```
+
+This will:
+
+* Install `see_file.exe` to `C:\Program Files\see_file`
+* Automatically add it to your system `PATH`
+* Allow you to run `see_file` from any terminal
+
+After installation, try:
+
+```bash
+see_file --help
+```
+
+---
+
+### 🔧 Manual install (optional)
+
+Alternatively, if you prefer to build manually from source:
+
+```bash
+git clone https://github.com/JoseLucasapp/Universal-terminal-file-viewer
+cd Universal-terminal-file-viewer
 cargo build --release
 ```
 
-Or install globally with:
+To make it available globally:
 
 ```bash
-cargo install --path .
+copy target\release\see_file.exe C:\Users\<your-user>\.cargo\bin
 ```
+
+Or add its folder to your PATH manually.
 
 ---
 
@@ -86,7 +110,7 @@ see_file --text ./notes.txt
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to submit issues, ideas, or pull requests on [GitHub](https://github.com/joselucasapp/see_file).
+Contributions are welcome! Feel free to submit issues, ideas, or pull requests on [GitHub](https://github.com/joselucasapp/Universal-terminal-file-viewer).
 
 ---
 
