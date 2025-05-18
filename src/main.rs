@@ -1,7 +1,7 @@
 use image::GenericImageView;
 use crossterm::style::{Stylize, PrintStyledContent};
 use std::io::{stdout};
-use crossterm::{execute, terminal};
+use crossterm::{execute, terminal, cursor};
 
 fn main() {
     let img = match image::open("teste.jpg"){
@@ -17,7 +17,7 @@ fn main() {
     let resized = img.resize(80, new_height, image::imageops::FilterType::Nearest);
 
     let mut stdout = stdout();
-    execute!(stdout, terminal::Clear(terminal::ClearType::All)).unwrap();
+    execute!(stdout, terminal::Clear(terminal::ClearType::All), cursor::MoveTo(0, 0)).unwrap();
 
     for y in 0..resized.height(){
         for x in 0..resized.width(){
