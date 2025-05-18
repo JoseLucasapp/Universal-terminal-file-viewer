@@ -4,14 +4,17 @@ use std::io::{stdout};
 use crossterm::{execute, terminal};
 
 fn main() {
-    let img = match image::open("o.jpg"){
+    let img = match image::open("teste.jpg"){
         Ok(img) => img,
         Err(e)=>{
             eprintln!("Failed to open image: {}", e);
             std::process::exit(1);
         }
     };
-    let resized = img.resize(80, 40, image::imageops::FilterType::Nearest);
+    let (w, h) = img.dimensions();
+    let new_height = (h as f32 * 0.5) as u32;
+
+    let resized = img.resize(80, new_height, image::imageops::FilterType::Nearest);
 
     let mut stdout = stdout();
     execute!(stdout, terminal::Clear(terminal::ClearType::All)).unwrap();
