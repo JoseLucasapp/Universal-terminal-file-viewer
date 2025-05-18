@@ -11,7 +11,7 @@ fn main() {
             Arg::new("image")
                 .long("image")
                 .short('i')
-                .value_name("PATH")
+                .value_name("IMAGE_PATH")
                 .help("image path to render in terminal")
                 .required(false),
         )
@@ -29,6 +29,14 @@ fn main() {
                 .short('v')
                 .value_name("1-9")
                 .help("Height scale factor (1-9)")
+                .required(false),
+        )
+        .arg(
+            Arg::new("pdf")
+                .long("pdf")
+                .short('p')
+                .value_name("PDF_PATH")
+                .help("pdf path to render in terminal")
                 .required(false),
         )
         .get_matches();
