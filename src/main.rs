@@ -15,18 +15,31 @@ fn main() {
                 .help("image path to render in terminal")
                 .required(false),
         )
+        .arg(
+            Arg::new("width")
+                .long("width")
+                .short('w')
+                .value_name("1-2")
+                .help("Width scale factor (1-2)")
+                .required(false),
+        )
         .get_matches();
 
-    if let Some(image_path) = matches.get_one::<String>("image"){
-        show_image(image_path);
-    }else{
-        eprintln!("Image path not found: see_file -image <image_path>");
-    }
+
+    let width_scale = matches
+        .get_one::<String>("width")
+        .and_then(|s| s.parse::<u32>().ok())
+        .filter(|v| (1..=2).contains(v))
+        .unwrap_or(1);
+
+    let image_path = matches.get_one::<String>("image").unwrap();
+
+    show_image(image_path, width_scale);
 
 }
 
 
-fn show_image(path: &str){
+fn show_image(path: &str, width_scale: u32){
     let img = match image::open(path){
         Ok(img) => img,
         Err(e)=>{
@@ -49,7 +62,8 @@ fn show_image(path: &str){
             let g = pixel[1];
             let b = pixel[2];
 
-            let style = "█".with(crossterm::style::Color::Rgb {r,g,b});
+            let block = "█".repeat(width_scale as usize);
+            let style = block.with(crossterm::style::Color::Rgb {r,g,b});
             execute!(stdout, PrintStyledContent(style)).unwrap();
         }
 
