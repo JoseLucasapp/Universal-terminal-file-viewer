@@ -41,6 +41,14 @@ fn main() {
                 .help("pdf path to render in terminal")
                 .required(false),
         )
+        .arg(
+            Arg::new("text")
+                .long("text")
+                .short('t')
+                .value_name("TEXT_PATH")
+                .help("text path to render in terminal")
+                .required(false),
+        )
         .get_matches();
 
 
@@ -60,6 +68,8 @@ fn main() {
         show_pdf(pdf_path);
     }else if let Some(image_path) = matches.get_one::<String>("image") {
         show_image(image_path, width_scale, height_scale);
+    }else if let Some(text_path) = matches.get_one::<String>("text") {
+        show_text_file(text_path);
     }else{
         eprintln!("Please specify either --image or --pdf");
     }
