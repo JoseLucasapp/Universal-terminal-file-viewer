@@ -9,20 +9,25 @@ fn main() {
         .about("See a file on the terminal")
         .arg(
             Arg::new("image")
-            .long("image")
-            .short("i")
-            .takes_value(true)
-            .help("image path"),
+                .long("image")
+                .short('i')
+                .value_name("PATH")
+                .help("image path to render in terminal")
+                .required(false),
         )
         .get_matches();
 
     if let Some(image_path) = matches.get_one::<String>("image"){
-        
+        show_image(image_path);
     }else{
         eprintln!("Image path not found: see_file -image <image_path>");
     }
 
-    let img = match image::open("teste.jpg"){
+}
+
+
+fn show_image(path: &str){
+    let img = match image::open(path){
         Ok(img) => img,
         Err(e)=>{
             eprintln!("Failed to open image: {}", e);
@@ -30,7 +35,7 @@ fn main() {
         }
     };
     let (w, h) = img.dimensions();
-    let new_height = (h as f32 * 0.5) as u32;
+    let new_height = (h as f32 * 0.1) as u32;
 
     let resized = img.resize(80, new_height, image::imageops::FilterType::Nearest);
 
