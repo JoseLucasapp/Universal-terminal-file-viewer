@@ -3,6 +3,7 @@ use image::GenericImageView;
 use crossterm::style::{Stylize, PrintStyledContent};
 use std::io::{stdout};
 use crossterm::{execute, terminal, cursor};
+use pdf_extract;
 
 fn main() {
     let matches = Command::new("see_file")
@@ -54,9 +55,13 @@ fn main() {
         .filter(|v| (1..=9).contains(v))
         .unwrap_or(1);
 
-    let image_path = matches.get_one::<String>("image").unwrap();
-
-    show_image(image_path, width_scale, height_scale);
+    if let Some(pdf_path) = matches.get_one::<String>("pdf") {
+        show_pdf(pdf_path);
+    }else if let Some(image_path) = matches.get_one::<String>("image") {
+        show_image(image_path, width_scale, height_scale);
+    }else{
+        eprintln!("Please specify either --image or --pdf");
+    }
 
 }
 
@@ -89,5 +94,19 @@ fn show_image(path: &str, width_scale: u32, height_scale: u32){
         }
 
         println!();
+    }
+}
+
+fn show_pdf(path: &str){
+    match pdf_extract::extract_text(path){
+        Ok(text)=>{
+            println!("--- PDF Content ---\n");
+            for line in text.lines(){
+                println!("{}", line);
+            }
+        }
+        Err(e)=>{
+            eprintln!("Failed to open pdf: {}", e);
+        }
     }
 }
