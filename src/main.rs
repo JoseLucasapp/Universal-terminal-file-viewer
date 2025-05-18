@@ -23,6 +23,14 @@ fn main() {
                 .help("Width scale factor (1-2)")
                 .required(false),
         )
+        .arg(
+            Arg::new("height")
+                .long("height")
+                .short('v')
+                .value_name("1-9")
+                .help("Height scale factor (1-9)")
+                .required(false),
+        )
         .get_matches();
 
 
@@ -32,14 +40,20 @@ fn main() {
         .filter(|v| (1..=2).contains(v))
         .unwrap_or(1);
 
+    let height_scale = matches
+        .get_one::<String>("height")
+        .and_then(|s| s.parse::<u32>().ok())
+        .filter(|v| (1..=9).contains(v))
+        .unwrap_or(1);
+
     let image_path = matches.get_one::<String>("image").unwrap();
 
-    show_image(image_path, width_scale);
+    show_image(image_path, width_scale, height_scale);
 
 }
 
 
-fn show_image(path: &str, width_scale: u32){
+fn show_image(path: &str, width_scale: u32, height_scale: u32){
     let img = match image::open(path){
         Ok(img) => img,
         Err(e)=>{
@@ -48,8 +62,7 @@ fn show_image(path: &str, width_scale: u32){
         }
     };
     let (w, h) = img.dimensions();
-    let new_height = (h as f32 * 0.1) as u32;
-
+    let new_height = ((h as f32 * 0.5) / (10.0 / height_scale.max(1) as f32)) as u32;
     let resized = img.resize(80, new_height, image::imageops::FilterType::Nearest);
 
     let mut stdout = stdout();
