@@ -16,6 +16,11 @@ fn main() {
         )
         .get_matches();
 
+    if let Some(image_path) = matches.get_one::<String>("image"){
+        
+    }else{
+        eprintln!("Image path not found: see_file -image <image_path>");
+    }
 
     let img = match image::open("teste.jpg"){
         Ok(img) => img,
