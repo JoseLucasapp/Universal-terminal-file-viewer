@@ -1,9 +1,22 @@
+use clap::{Arg, Command};
 use image::GenericImageView;
 use crossterm::style::{Stylize, PrintStyledContent};
 use std::io::{stdout};
 use crossterm::{execute, terminal, cursor};
 
 fn main() {
+    let matches = Command::new("see_file")
+        .about("See a file on the terminal")
+        .arg(
+            Arg::new("image")
+            .long("image")
+            .short("i")
+            .takes_value(true)
+            .help("image path"),
+        )
+        .get_matches();
+
+
     let img = match image::open("teste.jpg"){
         Ok(img) => img,
         Err(e)=>{
