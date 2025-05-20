@@ -73,6 +73,8 @@ fn main() {
         show_image(image_path, width_scale, height_scale);
     }else if let Some(text_path) = matches.get_one::<String>("text") {
         show_text_file(text_path);
+    }else if let Some(csv_path) = matches.get_one::<String>("csv") {
+        show_csv(csv_path);
     }else{
         eprintln!("Please specify either --image or --pdf");
     }
@@ -149,7 +151,7 @@ fn show_text_file(path: &str){
     }
 }
 
-fn read_csv_file(path: &str){
+fn show_csv(path: &str){
     match read_csv(path){
         Ok(_)=>{},
         Err(e)=>{
