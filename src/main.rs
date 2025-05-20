@@ -5,6 +5,9 @@ use std::io::{stdout};
 use crossterm::{execute, terminal, cursor};
 use pdf_extract;
 use std::fs;
+use std::error::Error;
+use sts::fs::File;
+use csv::Reader;
 
 fn main() {
     let matches = Command::new("see_file")
@@ -144,4 +147,26 @@ fn show_text_file(path: &str){
             eprintln!("Failed to open file: '{}' : {}",path, e);
         }
     }
+}
+
+fn read_csv(path: &str) -> Result<(), Box<dyn Error>>{
+    let file = File::open(path);
+    let mut reader = Reader::from_reader(file);
+
+    let headers = reader.headers()?;
+    println!("--- CSV Headers ---\n");
+    for header in headers{
+        println!("{:<15}", header);
+    }
+    println!("\n---------------");
+
+    for result in reader.records(){
+        let record = result?;
+        for field in record.iter(){
+            print!("{:<15}", field);
+        }
+        println!();
+    }
+
+    Ok(());
 }
