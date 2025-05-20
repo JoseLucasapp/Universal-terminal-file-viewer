@@ -149,6 +149,15 @@ fn show_text_file(path: &str){
     }
 }
 
+fn read_csv_file(path: &str){
+    match read_csv(path){
+        Ok(_)=>{},
+        Err(e)=>{
+            eprintln!("Failed to open file: '{}' : {}",path, e);
+        }
+    }
+}
+
 fn read_csv(path: &str) -> Result<(), Box<dyn Error>>{
     let file = File::open(path);
     let mut reader = Reader::from_reader(file);
