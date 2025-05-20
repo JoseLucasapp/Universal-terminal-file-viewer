@@ -6,8 +6,7 @@ use crossterm::{execute, terminal, cursor};
 use pdf_extract;
 use std::fs;
 use std::error::Error;
-use std::fs::File;
-use csv::Reader;
+use calamine::{open_workbook_auto, Reader, DataType};
 
 fn main() {
     let matches = Command::new("see_file")
@@ -169,23 +168,30 @@ fn show_csv(path: &str){
 }
 
 fn read_csv(path: &str) -> Result<(), Box<dyn Error>>{
-    let file = File::open(path)?;
-    let mut reader = Reader::from_reader(file);
+    let mut workbook  = open_workbook_auto(path)?;
+    let sheet_names = workbook.sheet_names().to_owned();
 
-    let headers = reader.headers()?;
-    println!("--- CSV Headers ---\n");
-    for header in headers{
-        println!("{:<15}", header);
+    if sheet_names.is_empty(){
+        return Err("No sheets found".into());
     }
-    println!("\n---------------");
 
-    for result in reader.records(){
-        let record = result?;
-        for field in record.iter(){
-            print!("{:<15}", field);
+    let range = workbook.worksheet_range(&sheet_names[0]).ok_or("Sheet not found")??;
+
+    println!("--- Excel: {} ---\n", sheet_names[0]);
+   
+    for row in range.rows(){
+        for cell in row{
+            let content = match cell{
+                DataType::String(s) => s.to_string(),
+                DataType::Float(f) => format!("{:.2}", f),
+                DataType::Int(i) => i.to_string(),
+                DataType::Bool(b) => b.to_string(),
+                DataType::Empty => "".to_string(),
+                _ => "[?]".to_string(),
+            };
+            println!("{:<20}", content);
         }
         println!();
     }
-
     Ok(())
 }
