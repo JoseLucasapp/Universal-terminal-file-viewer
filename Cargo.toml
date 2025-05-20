@@ -8,5 +8,4 @@ clap = { version = "4.5", features = ["derive"] }
 image = "0.25"
 crossterm = "0.27"
 pdf-extract = "0.6.0"
-[dependencies]
 csv = "1.3"

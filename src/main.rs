@@ -6,7 +6,7 @@ use crossterm::{execute, terminal, cursor};
 use pdf_extract;
 use std::fs;
 use std::error::Error;
-use sts::fs::File;
+use std::fs::File;
 use csv::Reader;
 
 fn main() {
@@ -169,7 +169,7 @@ fn show_csv(path: &str){
 }
 
 fn read_csv(path: &str) -> Result<(), Box<dyn Error>>{
-    let file = File::open(path);
+    let file = File::open(path)?;
     let mut reader = Reader::from_reader(file);
 
     let headers = reader.headers()?;
@@ -187,5 +187,5 @@ fn read_csv(path: &str) -> Result<(), Box<dyn Error>>{
         println!();
     }
 
-    Ok(());
+    Ok(())
 }
