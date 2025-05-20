@@ -52,6 +52,14 @@ fn main() {
                 .help("text path to render in terminal")
                 .required(false),
         )
+        .arg(
+            Arg::new("csv")
+                .long("csv")
+                .short('c')
+                .value_name("CSV_PATH")
+                .help("csv path to render in terminal")
+                .required(false),
+        )
         .get_matches();
 
 
