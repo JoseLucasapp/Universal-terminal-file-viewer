@@ -1,6 +1,4 @@
 use clap::{Arg, Command};
-use std::error::Error;
-use calamine::{open_workbook_auto, Reader, DataType};
 
 mod show_pdf;
 use show_pdf :: main as show_pdf;
@@ -10,6 +8,9 @@ use show_image :: main as show_image;
 
 mod show_text;
 use show_text :: main as show_text_file;
+
+mod show_csv;
+use show_csv :: main as show_csv;
 
 fn main() {
     let matches = Command::new("see_file")
@@ -89,42 +90,4 @@ fn main() {
         eprintln!("Please specify either --image or --pdf");
     }
 
-}
-
-fn show_csv(path: &str){
-    match read_csv(path){
-        Ok(_)=>{},
-        Err(e)=>{
-            eprintln!("Failed to open file: '{}' : {}",path, e);
-        }
-    }
-}
-
-fn read_csv(path: &str) -> Result<(), Box<dyn Error>>{
-    let mut workbook  = open_workbook_auto(path)?;
-    let sheet_names = workbook.sheet_names().to_owned();
-
-    if sheet_names.is_empty(){
-        return Err("No sheets found".into());
-    }
-
-    let range = workbook.worksheet_range(&sheet_names[0]).ok_or("Sheet not found")??;
-
-    println!("--- Excel: {} ---\n", sheet_names[0]);
-   
-    for row in range.rows(){
-        for cell in row{
-            let content = match cell{
-                DataType::String(s) => s.to_string(),
-                DataType::Float(f) => format!("{:.2}", f),
-                DataType::Int(i) => i.to_string(),
-                DataType::Bool(b) => b.to_string(),
-                DataType::Empty => "".to_string(),
-                _ => "[?]".to_string(),
-            };
-            println!("{:<20}", content);
-        }
-        println!();
-    }
-    Ok(())
 }
