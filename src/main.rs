@@ -1,14 +1,13 @@
 use clap::{Arg, Command};
-use image::GenericImageView;
-use crossterm::style::{Stylize, PrintStyledContent};
-use std::io::{stdout};
-use crossterm::{execute, terminal, cursor};
 use std::fs;
 use std::error::Error;
 use calamine::{open_workbook_auto, Reader, DataType};
 
 mod show_pdf;
 use show_pdf :: main as show_pdf;
+
+mod show_image;
+use show_image :: main as show_image;
 
 fn main() {
     let matches = Command::new("see_file")
@@ -88,38 +87,6 @@ fn main() {
         eprintln!("Please specify either --image or --pdf");
     }
 
-}
-
-
-fn show_image(path: &str, width_scale: u32, height_scale: u32){
-    let img = match image::open(path){
-        Ok(img) => img,
-        Err(e)=>{
-            eprintln!("Failed to open image: {}", e);
-            std::process::exit(1);
-        }
-    };
-    let (_w, h) = img.dimensions();
-    let new_height = ((h as f32 * 0.5) / (10.0 / height_scale.max(1) as f32)) as u32;
-    let resized = img.resize(80, new_height, image::imageops::FilterType::Nearest);
-
-    let mut stdout = stdout();
-    execute!(stdout, terminal::Clear(terminal::ClearType::All), cursor::MoveTo(0, 0)).unwrap();
-
-    for y in 0..resized.height(){
-        for x in 0..resized.width(){
-            let pixel = resized.get_pixel(x,y);
-            let r = pixel[0];
-            let g = pixel[1];
-            let b = pixel[2];
-
-            let block = "█".repeat(width_scale as usize);
-            let style = block.with(crossterm::style::Color::Rgb {r,g,b});
-            execute!(stdout, PrintStyledContent(style)).unwrap();
-        }
-
-        println!();
-    }
 }
 
 fn show_text_file(path: &str){
