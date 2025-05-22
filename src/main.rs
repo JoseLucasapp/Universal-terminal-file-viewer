@@ -3,10 +3,12 @@ use image::GenericImageView;
 use crossterm::style::{Stylize, PrintStyledContent};
 use std::io::{stdout};
 use crossterm::{execute, terminal, cursor};
-use pdf_extract;
 use std::fs;
 use std::error::Error;
 use calamine::{open_workbook_auto, Reader, DataType};
+
+mod show_pdf;
+use show_pdf :: main as show_pdf;
 
 fn main() {
     let matches = Command::new("see_file")
@@ -117,32 +119,6 @@ fn show_image(path: &str, width_scale: u32, height_scale: u32){
         }
 
         println!();
-    }
-}
-
-fn show_pdf(path: &str){
-    match pdf_extract::extract_text(path){
-        Ok(text)=>{
-            println!("--- PDF Content ---\n");
-
-            let clean = text
-                .lines()
-                .map(|line| line.trim())
-                .filter(|line| !line.is_empty())
-                .collect::<Vec<_>>()
-                .join(" ");
-
-            let pretty = clean
-            .replace(". ", ".\n\n")
-            .replace("! ", "!\n")
-            .replace("? ", "?\n");
-
-
-            println!("{}", pretty)
-        }
-        Err(e)=>{
-            eprintln!("Failed to open pdf: {}", e);
-        }
     }
 }
 
