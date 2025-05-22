@@ -1,5 +1,4 @@
 use clap::{Arg, Command};
-use std::fs;
 use std::error::Error;
 use calamine::{open_workbook_auto, Reader, DataType};
 
@@ -8,6 +7,9 @@ use show_pdf :: main as show_pdf;
 
 mod show_image;
 use show_image :: main as show_image;
+
+mod show_text;
+use show_text :: main as show_text_file;
 
 fn main() {
     let matches = Command::new("see_file")
@@ -87,18 +89,6 @@ fn main() {
         eprintln!("Please specify either --image or --pdf");
     }
 
-}
-
-fn show_text_file(path: &str){
-    match fs::read_to_string(path){
-        Ok(content) =>{
-            println!("--- File content ---\n");
-            println!("{}", content);
-        }
-        Err(e)=>{
-            eprintln!("Failed to open file: '{}' : {}",path, e);
-        }
-    }
 }
 
 fn show_csv(path: &str){
