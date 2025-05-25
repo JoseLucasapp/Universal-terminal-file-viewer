@@ -62,6 +62,12 @@ fn main() {
                 .value_name("CSV_PATH")
                 .help("csv path to render in terminal")
                 .required(false),
+        ).arg(
+            Arg::new("download")
+                .long("download")
+                .short('d')
+                .help("Download the image to the current directory")
+                .required(false),
         )
         .get_matches();
 
@@ -78,10 +84,12 @@ fn main() {
         .filter(|v| (1..=9).contains(v))
         .unwrap_or(1);
 
+    let download = matches.get_flag("download");
+
     if let Some(pdf_path) = matches.get_one::<String>("pdf") {
         show_pdf(pdf_path);
     }else if let Some(image_path) = matches.get_one::<String>("image") {
-        show_image(image_path, width_scale, height_scale);
+        show_image(image_path, width_scale, height_scale, download);
     }else if let Some(text_path) = matches.get_one::<String>("text") {
         show_text_file(text_path);
     }else if let Some(csv_path) = matches.get_one::<String>("csv") {
