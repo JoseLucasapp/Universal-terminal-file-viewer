@@ -1,4 +1,4 @@
-use clap::{Arg, Command};
+use clap::{Arg, Command, ArgAction};
 
 mod show_pdf;
 use show_pdf :: main as show_pdf;
@@ -67,7 +67,8 @@ fn main() {
                 .long("download")
                 .short('d')
                 .help("Download the image to the current directory")
-                .required(false),
+                .required(false)
+                .action(ArgAction::SetTrue),
         )
         .get_matches();
 
